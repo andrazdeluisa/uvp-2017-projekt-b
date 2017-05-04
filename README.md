@@ -1,4 +1,4 @@
-KAČA 2017
+KAČA 2018
 =========
 
 Vzorčna projektna naloga za Uvod v programiranje
