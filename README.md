@@ -1,8 +1,7 @@
-KAČA 2017
+﻿KAČA 2017
 =========
 
 Vzorčna projektna naloga za Uvod v programiranje
 ------------------------------------------------
 
-To bo najboljša igrica na svetu.
-
+To bo najbolj boljša igrica na svetu.
