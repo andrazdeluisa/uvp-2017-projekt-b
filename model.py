@@ -1,3 +1,4 @@
+import random
 DESNO, GOR, DOL, LEVO = 'desno', 'gor', 'dol', 'levo'
 
 class Kaca:
@@ -6,22 +7,79 @@ class Kaca:
         self.smer = smer
 
     def __repr__(self):
-        return 'Kaca({}, smer={})'.format(self.tocke, self.smer.upper())
+        if self.smer == DESNO:
+            opis_smeri = 'DESNO'
+        elif self.smer == GOR:
+            opis_smeri = 'GOR'
+        elif self.smer == DOL:
+            opis_smeri = 'DOL'
+        elif self.smer == LEVO:
+            opis_smeri = 'LEVO'
+        return 'Kaca({}, smer={})'.format(self.tocke, opis_smeri)
 
-    def premakni(self):
-        del self.tocke[-1]
+    def nova_glava(self):
         glava_x, glava_y = self.tocke[0]
         if self.smer == DESNO:
             glava_x += 1
         elif self.smer == GOR:
-            glava_y += 1
-        elif self.smer == DOL:
             glava_y -= 1
+        elif self.smer == DOL:
+            glava_y += 1
         elif self.smer == LEVO:
             glava_x -= 1
-        self.tocke.insert(0, (glava_x, glava_y))
+        return glava_x, glava_y
+
+    def premakni(self):
+        del self.tocke[-1]
+        self.tocke.insert(0, self.nova_glava())
+
+    def zrasti(self):
+        self.tocke.insert(0, self.nova_glava())
 
     def zamenjaj_smer(self, nova_smer):
         self.smer = nova_smer
 
 
+class Igra:
+    def __init__(self, sirina, visina):
+        self.sirina = sirina
+        self.visina = visina
+
+        # vodoravno kačo dolžine 3 nastavimo na naključno mesto na plošči
+        x, y = random.randrange(self.sirina - 2), random.randrange(self.visina)
+        self.kaca = Kaca([(x + 2, y), (x + 1, y), (x, y)])
+
+        # poiščemo mesto za jabolko, ki ne leži na kači
+        while True:
+            self.jabolko = random.randrange(self.sirina), random.randrange(self.visina)
+            if self.jabolko not in self.kaca.tocke:
+                break
+
+    def __str__(self):
+        polja = []
+        for _ in range(self.visina):
+            polja.append(self.sirina * [' '])
+        if self.je_kaca_v_redu():
+            for i, (x, y) in enumerate(self.kaca.tocke):
+                polja[y][x] = str(i % 10)
+        x_jabolko, y_jabolko = self.jabolko
+        polja[y_jabolko][x_jabolko] = '@'
+        rob = '+{}+'.format(self.sirina * '-')
+        izpis = ''
+        for vrstica in polja:
+            izpis += '|{}|\n'.format(''.join(vrstica))
+        return '{}\n{}{}'.format(rob, izpis, rob)
+
+    def je_kaca_v_redu(self):
+        for x, y in self.kaca.tocke:
+            # preverimo, ali je celotna kača na plošči
+            if not (0 <= x < self.sirina and 0 <= y < self.visina):
+                return False
+
+        # preverimo, da kača ne seka same sebe, torej ima vse točke različne
+        return len(self.kaca.tocke) == len(set(self.kaca.tocke))
+
+    def naredi_korak(self):
+        self.kaca.premakni()
+
+igra = Igra(10, 10)
