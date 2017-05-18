@@ -3,8 +3,6 @@ import model
 
 VELIKOST_POLJA = 10
 ODMIK = 5
-# koliko korakov v sekundi naj naredi kača
-HITROST = 3
 
 class Kaca:
     def __init__(self, okno):
@@ -26,7 +24,7 @@ class Kaca:
     def osnovna_zanka(self):
         self.igra.naredi_korak()
         self.osvezi_prikaz()
-        self.okno.after(1000 // HITROST, self.osnovna_zanka)
+        self.okno.after(1000 // self.igra.tezavnost(), self.osnovna_zanka)
 
     def obdelaj_tipko(self, event):
         if event.keysym == 'Right':

@@ -91,4 +91,8 @@ class Igra:
         else:
             self.kaca.premakni()
 
+    def tezavnost(self):
+        '''Vrne število korakov, ki jih v sekundi naredi kača.'''
+        return len(self.kaca.tocke)
+
 igra = Igra(10, 10)
