@@ -49,11 +49,8 @@ class Igra:
         x, y = random.randrange(self.sirina - 2), random.randrange(self.visina)
         self.kaca = Kaca([(x + 2, y), (x + 1, y), (x, y)])
 
-        # poiščemo mesto za jabolko, ki ne leži na kači
-        while True:
-            self.jabolko = random.randrange(self.sirina), random.randrange(self.visina)
-            if self.jabolko not in self.kaca.tocke:
-                break
+        self.postavi_jabolko()
+
 
     def __str__(self):
         polja = []
@@ -70,6 +67,14 @@ class Igra:
             izpis += '|{}|\n'.format(''.join(vrstica))
         return '{}\n{}{}'.format(rob, izpis, rob)
 
+    def postavi_jabolko(self):
+        # poiščemo mesto za jabolko, ki ne leži na kači
+        while True:
+            self.jabolko = random.randrange(self.sirina), random.randrange(self.visina)
+            if self.jabolko not in self.kaca.tocke:
+                break
+
+
     def je_kaca_v_redu(self):
         for x, y in self.kaca.tocke:
             # preverimo, ali je celotna kača na plošči
@@ -80,6 +85,10 @@ class Igra:
         return len(self.kaca.tocke) == len(set(self.kaca.tocke))
 
     def naredi_korak(self):
-        self.kaca.premakni()
+        if self.kaca.tocke[0] == self.jabolko:
+            self.kaca.zrasti()
+            self.postavi_jabolko()
+        else:
+            self.kaca.premakni()
 
 igra = Igra(10, 10)
